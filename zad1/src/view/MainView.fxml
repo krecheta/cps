@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ScatterChart fx:id="signalChart" layoutX="1.0" layoutY="24.0" prefHeight="200.0" prefWidth="580.0">
+              <xAxis>
+                <NumberAxis fx:id="signalXAxis" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="signalYAxis" side="LEFT" />
+              </yAxis>
+            </ScatterChart>
+            <BarChart fx:id="histogramChart" layoutX="1.0" layoutY="234.0" prefHeight="200.0" prefWidth="580.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <Label layoutX="241.0" layoutY="4.0" text="Wykres sygnału:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="257.0" layoutY="214.0" text="Histogram:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="230.0" layoutY="455.0" text="Parametry sygnału:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="samplingFrequencyLabel" layoutX="214.0" layoutY="475.0" text="-">
+            	<font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font> 
+            </Label>
+            <Label layoutX="28.0" layoutY="500.0" text="amplituda (A):" />
+            <Label layoutX="28.0" layoutY="475.0" text="częstotliwość próbkowania (f):" />
+            <Label layoutX="28.0" layoutY="525.0" text="czas początkowy (t1):" />
+            <Label layoutX="28.0" layoutY="550.0" text="czas trwania sygnału (d):" />
+            <Label layoutX="28.0" layoutY="575.0" text="okres podstawowy (T):" />
+            <Label layoutX="28.0" layoutY="600.0" text="współczynnik wypełnienia (kw):" />
+            <Label fx:id="amplitudeLabel" layoutX="214.0" layoutY="500.0" text="-">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="initTimeLabel" layoutX="214.0" layoutY="525.0" text="-">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="timeDurationLabel" layoutX="214.0" layoutY="550.0" text="-">
+	            <font>
+	              <Font name="System Bold Italic" size="12.0" />
+	            </font>
+            </Label>
+            <Label fx:id="periodLabel" layoutX="214.0" layoutY="575.0" text="-">
+            	<font>
+	              <Font name="System Bold Italic" size="12.0" />
+	            </font>
+	        </Label>
+            <Label fx:id="fillFactoryLabel" layoutX="214.0" layoutY="600.0" text="-">
+            	<font>
+	              <Font name="System Bold Italic" size="12.0" />
+	            </font>
+            </Label>
+            <Label layoutX="315.0" layoutY="484.0" text="wartość średnia:" />
+            <Label layoutX="315.0" layoutY="509.0" text="wartość średnia bezwzględna:" />
+            <Label layoutX="315.0" layoutY="534.0" text="moc średnia:" />
+            <Label layoutX="315.0" layoutY="559.0" text="wariancja:" />
+            <Label layoutX="315.0" layoutY="584.0" text="wartość skuteczna:" />
+            <Label fx:id="avgValueLabel" layoutX="506.0" layoutY="484.0" text="-">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="absAvgValueLabel" layoutX="506.0" layoutY="509.0" text="-">
+            	<font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="avgPowerLabel" layoutX="506.0" layoutY="534.0" text="-">
+            	<font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="varianceLabel" layoutX="506.0" layoutY="559.0" text="-">
+            	<font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="effectiveValueLabel" layoutX="506.0" layoutY="584.0" text="-">
+            	<font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Slider fx:id="binsSlider" blockIncrement="1.0" layoutX="424.0" layoutY="427.0" majorTickUnit="5.0" max="20.0" min="5.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
+            <Label layoutX="250.0" layoutY="426.0" text="liczba przedziałów histogramu:" />
+         </children>
+      </AnchorPane>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="31.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="addButton" layoutX="111.0" layoutY="1.0" mnemonicParsing="false" onAction="#addButtonAction" prefHeight="25.0" prefWidth="70.0" text="Dodaj" textAlignment="CENTER" />
+            <Button fx:id="removeButton" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Usuń" textAlignment="CENTER" />
+            <Button fx:id="loadButton" layoutX="400.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Wczytaj z pliku" textAlignment="CENTER" />
+            <Button fx:id="saveButton" layoutX="577.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Zapisz do pliku" textAlignment="CENTER" />
+         </children>
+      </AnchorPane>
+   </bottom>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" layoutX="50.0" layoutY="4.0" prefHeight="17.0" prefWidth="99.0" text="Lista sygnałów:" textAlignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ListView fx:id="signalsList" layoutX="11.0" layoutY="28.0" prefHeight="537.0" prefWidth="189.0" />
+         </children>
+      </AnchorPane>
+   </left>
+</BorderPane>

@@ -12,8 +12,7 @@ public class UnitJumpSignal extends Signal {
 		calculateStatistics();
 	}
 
-	@Override
-	protected void calculateValues() {
+	private void calculateValues() {
 		values = new double[duration*samplingFrequency];
 		double t;
 		for(int i = 0; i < values.length; i++) {

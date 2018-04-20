@@ -3,8 +3,11 @@ package model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.UUID;
 
-public abstract class Signal {
+public class Signal {
+	//id
+	UUID id;
 	//nazwa
 	String name;
 	//amplituda
@@ -30,6 +33,7 @@ public abstract class Signal {
 	protected double effectiveValue;
 	
 	protected Signal(String name, double amplitude, int initTime, int duration, int samplingFrequency) {
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.amplitude = amplitude;
 		this.initTime = initTime;
@@ -37,7 +41,21 @@ public abstract class Signal {
 		this.samplingFrequency = samplingFrequency;
 	}
 	
-	protected abstract void calculateValues();
+	public Signal(String name, int initTime, int sampplingFrequency, double[] values) {
+		this.id = UUID.randomUUID();
+		this.name = name;
+		this.initTime = initTime;
+		this.duration = values.length / sampplingFrequency;
+		this.samplingFrequency = sampplingFrequency;
+		this.values = values;
+		
+		double max = Arrays.stream(values).max().getAsDouble();
+		double min = Math.abs(Arrays.stream(values).min().getAsDouble());
+		
+		this.amplitude = ( max > min ) ? max : min;
+		
+		calculateStatistics();
+	}
 	
 	//obliczanie statystyk sygna³u
 	protected void calculateStatistics() {
@@ -46,6 +64,10 @@ public abstract class Signal {
 		avgPower = Arrays.stream(values).map( i -> Math.pow(i, 2) ).sum() / (double)(values.length);
 		variance = Arrays.stream(values).map( i -> Math.pow(i-avgValue, 2) ).sum() / (double)(values.length);
 		effectiveValue = Math.sqrt(avgPower);
+	}
+	
+	public UUID getId() {
+		return id;
 	}
 	
 	public String getName() {
@@ -118,4 +140,5 @@ public abstract class Signal {
 	    bd = bd.setScale(3, RoundingMode.HALF_UP);
 	    return bd.doubleValue();
 	}
+
 }

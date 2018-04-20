@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +25,17 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Signal;
 import model.SignalsManager;
+import model.SinusoidalOneHalfSignal;
 
 public class MainController implements Initializable{
 
@@ -95,6 +102,18 @@ public class MainController implements Initializable{
     @FXML
     private ListView<Signal> signalsList;
     
+    @FXML
+    private Button plusButton;
+
+    @FXML
+    private Button subButton;
+
+    @FXML
+    private Button mulButton;
+
+    @FXML
+    private Button divButton;
+    
     SignalsManager signalsManager;
     
 	@Override
@@ -107,9 +126,16 @@ public class MainController implements Initializable{
 			//wybrany element to newValue
 			@Override
 			public void changed(ObservableValue<? extends Signal> observable, Signal oldValue, Signal newValue) {
-				drawChart();
-				drawHistogram();
-				showStatistics();
+				if(newValue != null) {
+					setButtonsDisable(false);
+					showStatistics();
+					drawChart();
+					drawHistogram();
+				} else {
+					resetStatistics();
+					resetCharts();
+					setButtonsDisable(true);
+				}
 			}
 		});
 		
@@ -131,6 +157,8 @@ public class MainController implements Initializable{
 		
 		histogramChart.setLegendVisible(false);
 		signalChart.setLegendVisible(false);
+		
+		setButtonsDisable(true);
 	}
 	
 	//listener do przycisku "dodaj" na panelu g³ównym - otwiera nowe okno
@@ -146,6 +174,78 @@ public class MainController implements Initializable{
 			
 			//przekazanie wartoœci do AddSignalController
 			loader.<NewSignalController>getController().initData(signalsManager, this);;
+			stage.show();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//listener do przycisku usuñ
+	@FXML
+	private void removeButtonAction(ActionEvent event) {
+		signalsManager.removeSignal(signalsList.getSelectionModel().getSelectedItem());
+		signalsList.getSelectionModel().select(null);
+	}
+	
+	//listener do wczytywania sygna³u z pliku
+	@FXML
+	private void loadButtonAction(ActionEvent event) {
+		FileChooser chooser = new FileChooser();
+		File file = chooser.showOpenDialog(new Stage());
+		
+		if(file != null) {
+			try {
+				signalsManager.loadSignalFromFile(file.getAbsolutePath());
+			} catch (IOException e) {
+				showError("Wyst¹pi³ odczytu z pliku");
+			}
+		}
+	}
+	
+	//listener do przycisku zapisz na panelu g³ównym
+	@FXML
+	private void saveButtonAction(ActionEvent event) {
+		Signal signal = signalsList.getSelectionModel().getSelectedItem();
+		
+		try {
+			FileChooser chooser = new FileChooser();
+			File file = chooser.showSaveDialog(new Stage());
+			
+			if(file != null) {
+				signalsManager.saveSignalToFile(signal, file.getAbsolutePath());
+				showInformation("Sygna³ zapisano do pliku " + file.getName());
+			}
+		} catch (FileNotFoundException e) {
+			showError("Wyst¹pi³ zapisu do pliku");
+		}
+	}
+	
+	//listener do operacji arytmetycznych - pojawia siê nowe okno z mo¿liwymi sygna³ami
+	@FXML
+	private void arthmeticOperationAction(ActionEvent event) {
+		Signal signal = signalsList.getSelectionModel().getSelectedItem();
+		List<Signal> signals = signalsManager.getSignalsToArthmeticOperation(signal);
+		String operation;
+			
+		if(event.getSource() == plusButton) {
+			operation = "add";
+		} else if(event.getSource() == subButton) {
+			operation = "sub";
+		} else if(event.getSource() == mulButton) {
+			operation = "mul";
+		} else {
+			operation = "div";
+		}
+		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignalSelectionView.fxml"));
+			Parent parent = loader.load();
+			Scene scene = new Scene(parent);
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.setResizable(false);
+			loader.<SignalSelectionController>getController().initData(signalsManager, signals, operation, signal);;
 			stage.show();
 			
 		} catch(Exception e) {
@@ -169,6 +269,20 @@ public class MainController implements Initializable{
 		avgPowerLabel.setText(String.valueOf(signal.getAvgPower()));
 		varianceLabel.setText(String.valueOf(signal.getVariance()));
 		effectiveValueLabel.setText(String.valueOf(signal.getEffectiveValue()));
+	}
+	
+	private void resetStatistics() {
+		samplingFrequencyLabel.setText("-");
+		amplitudeLabel.setText("-");
+		initTimeLabel.setText("-");
+		timeDurationLabel.setText("-");
+		periodLabel.setText("-");
+		fillFactoryLabel.setText("-");
+		avgValueLabel.setText("-");
+		absAvgValueLabel.setText("-");
+		avgPowerLabel.setText("-");
+		varianceLabel.setText("-");
+		effectiveValueLabel.setText("-");
 	}
 	
 	//rysuje wykres sygna³u
@@ -229,6 +343,37 @@ public class MainController implements Initializable{
 		values.forEach( (k,v) -> series.getData().add(new BarChart.Data<String, Number> (k,v)) );
 		histogramChart.getData().add(series);
 	}
-
+	
+	private void resetCharts() {
+		histogramChart.getData().clear();
+		signalChart.getData().clear();
+	}
+	
+	//wyœwietlanie komunikatu o b³êdzie
+	private void showError(String message) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.initStyle(StageStyle.UTILITY);
+        alert.setHeaderText("B³ad");
+        alert.setContentText(message);
+        alert.showAndWait();
+	}
+	
+	//wyœwietlanie komunikatu
+	private void showInformation(String message) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.initStyle(StageStyle.UTILITY);
+        alert.setHeaderText("Informacja");
+        alert.setContentText(message);
+        alert.showAndWait();
+	}
+	
+	private void setButtonsDisable(boolean b) {
+		saveButton.setDisable(b);
+		removeButton.setDisable(b);
+		plusButton.setDisable(b);
+		subButton.setDisable(b);
+		mulButton.setDisable(b);
+		divButton.setDisable(b);
+	}
 }
 

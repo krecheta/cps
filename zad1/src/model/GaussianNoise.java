@@ -11,8 +11,7 @@ public class GaussianNoise extends Signal {
 		calculateStatistics();
 	}
 
-	@Override
-	protected void calculateValues() {
+	private void calculateValues() {
 		values = new double[duration*samplingFrequency];
 		Random gen = new Random();
 		

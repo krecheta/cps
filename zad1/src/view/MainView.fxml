@@ -121,22 +121,47 @@
    <bottom>
       <AnchorPane prefHeight="31.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="addButton" layoutX="111.0" layoutY="1.0" mnemonicParsing="false" onAction="#addButtonAction" prefHeight="25.0" prefWidth="70.0" text="Dodaj" textAlignment="CENTER" />
-            <Button fx:id="removeButton" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Usuń" textAlignment="CENTER" />
-            <Button fx:id="loadButton" layoutX="400.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Wczytaj z pliku" textAlignment="CENTER" />
-            <Button fx:id="saveButton" layoutX="577.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Zapisz do pliku" textAlignment="CENTER" />
+            <Button fx:id="addButton" layoutX="111.0" layoutY="1.0" mnemonicParsing="false" onAction="#addButtonAction" prefHeight="25.0" prefWidth="90.0" text="Nowy sygnał" textAlignment="CENTER" />
+            <Button fx:id="removeButton" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" onAction="#removeButtonAction" prefHeight="25.0" prefWidth="90.0" text="Usuń sygnał" textAlignment="CENTER" />
+            <Button fx:id="loadButton" layoutX="400.0" layoutY="1.0" mnemonicParsing="false" onAction="#loadButtonAction" prefHeight="25.0" prefWidth="100.0" text="Wczytaj z pliku" textAlignment="CENTER" />
+            <Button fx:id="saveButton" layoutX="577.0" layoutY="1.0" mnemonicParsing="false" onAction="#saveButtonAction" prefHeight="25.0" prefWidth="100.0" text="Zapisz do pliku" textAlignment="CENTER" />
          </children>
       </AnchorPane>
    </bottom>
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutX="50.0" layoutY="4.0" prefHeight="17.0" prefWidth="99.0" text="Lista sygnałów:" textAlignment="CENTER">
+            <Label alignment="CENTER" layoutX="37.0" layoutY="4.0" prefHeight="20.0" prefWidth="115.0" text="Lista sygnałów:" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <ListView fx:id="signalsList" layoutX="11.0" layoutY="28.0" prefHeight="523.0" prefWidth="189.0" />
+            <Label layoutX="24.0" layoutY="555.0" text="Operacje arytmetyczne:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="plusButton" layoutX="14.0" layoutY="580.0" mnemonicParsing="false" onAction="#arthmeticOperationAction" text="+">
                <font>
                   <Font size="14.0" />
                </font>
-            </Label>
-            <ListView fx:id="signalsList" layoutX="11.0" layoutY="28.0" prefHeight="537.0" prefWidth="189.0" />
+            </Button>
+            <Button fx:id="subButton" layoutX="64.0" layoutY="580.0" mnemonicParsing="false" onAction="#arthmeticOperationAction" prefHeight="30.0" prefWidth="30.0" text="-">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="mulButton" layoutX="117.0" layoutY="580.0" mnemonicParsing="false" onAction="#arthmeticOperationAction" prefHeight="30.0" prefWidth="30.0" text="*">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="divButton" layoutX="171.0" layoutY="580.0" mnemonicParsing="false" onAction="#arthmeticOperationAction" prefHeight="30.0" prefWidth="30.0" text="/">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </left>

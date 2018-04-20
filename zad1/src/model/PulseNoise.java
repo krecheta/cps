@@ -14,8 +14,7 @@ public class PulseNoise extends Signal {
 		calculateStatistics();
 	}
 
-	@Override
-	protected void calculateValues() {
+	private void calculateValues() {
 		values = new double[samplingFrequency*duration];
 		Random ran = new Random();
 		for(int i = 0; i < values.length; i++) {

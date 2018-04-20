@@ -12,7 +12,6 @@ public class SinusoidalSignal extends Signal {
 		calculateStatistics();
 	}
 	
-	@Override
 	protected void calculateValues() {
 		values = new double[duration*samplingFrequency];
 		for(int i = 0; i < values.length; i++) {

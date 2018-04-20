@@ -14,7 +14,6 @@ public class RectangularSignal extends Signal {
 		calculateStatistics();
 	}
 	
-	@Override
 	protected void calculateValues() {
 		values = new double[samplingFrequency*duration];
 		int kInterval = period * samplingFrequency;

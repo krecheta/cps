@@ -8,9 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.StageStyle;
 import model.Signal;
 import model.SignalsManager;
 
@@ -48,16 +50,28 @@ public class SignalSelectionController implements Initializable{
 	
     @FXML
     void okButtonAction(ActionEvent event) {
+    	Signal sig2 = signalsComboBox.getValue();
     	switch(operation) {
-    	case "add":
-    		Signal sig2 = signalsComboBox.getValue();
+    	case "Dodawanie":
     		signalsManager.addSignals(sig1, sig2, nameTextField.getText());
     		break;
-    	case "sub":
+    	case "Odejmowanie":
+    		signalsManager.subSignals(sig1, sig2, nameTextField.getText());
     		break;
-    	case "mul":
+    	case "Mno¿enie":
+    		signalsManager.mulSignals(sig1, sig2, nameTextField.getText());
     		break;
-    	case "div":
+    	case "Dzielenie":
+    		try {
+				signalsManager.divSignals(sig1, sig2, nameTextField.getText());
+			} catch (Exception e) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.initStyle(StageStyle.UTILITY);
+		        alert.setHeaderText("Wyst¹pi³ b³¹d");
+				alert.setTitle("B³¹d");
+		        alert.setContentText("Próba podzielenia przez zero!");
+		        alert.showAndWait();
+			}
     		break;
     	}
     }

@@ -8,6 +8,8 @@ public class SinusoidalSignal extends Signal {
 	public SinusoidalSignal(String name, double amplitude, int initTime, int duration, int samplingFrequency, int period) {
 		super(name, amplitude, initTime, duration, samplingFrequency);
 		this.period = period;
+		int i = duration / period;
+		this.duration = i * period;
 		calculateValues();
 		calculateStatistics();
 	}

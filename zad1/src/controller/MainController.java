@@ -229,13 +229,13 @@ public class MainController implements Initializable{
 		String operation;
 			
 		if(event.getSource() == plusButton) {
-			operation = "add";
+			operation = "Dodawanie";
 		} else if(event.getSource() == subButton) {
-			operation = "sub";
+			operation = "Odejmowanie";
 		} else if(event.getSource() == mulButton) {
-			operation = "mul";
+			operation = "Mno¿enie";
 		} else {
-			operation = "div";
+			operation = "Dzielenie";
 		}
 		
 		try {
@@ -245,6 +245,7 @@ public class MainController implements Initializable{
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			stage.setResizable(false);
+			stage.setTitle(operation);
 			loader.<SignalSelectionController>getController().initData(signalsManager, signals, operation, signal);;
 			stage.show();
 			
@@ -353,7 +354,8 @@ public class MainController implements Initializable{
 	private void showError(String message) {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.initStyle(StageStyle.UTILITY);
-        alert.setHeaderText("B³ad");
+		alert.setTitle("B³¹d");
+        alert.setHeaderText("Wyst¹pi³ b³ad");
         alert.setContentText(message);
         alert.showAndWait();
 	}
@@ -363,6 +365,7 @@ public class MainController implements Initializable{
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.initStyle(StageStyle.UTILITY);
         alert.setHeaderText("Informacja");
+        alert.setTitle("Informacja");
         alert.setContentText(message);
         alert.showAndWait();
 	}

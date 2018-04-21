@@ -10,6 +10,8 @@ public class RectangularSignal extends Signal {
 		super(name, amplitude, initTime, duration, samplingFrequency);
 		this.period = period;
 		this.fillFactory = fillFactory;
+		int i = duration / period;
+		this.duration = i * period;
 		calculateValues();
 		calculateStatistics();
 	}

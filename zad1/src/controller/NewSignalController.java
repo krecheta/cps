@@ -8,9 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.StageStyle;
 import model.GaussianNoise;
 import model.PulseNoise;
 import model.RectangularSignal;
@@ -101,79 +103,71 @@ public class NewSignalController implements Initializable{
 	@FXML
 	private void addButtonAction(ActionEvent event) {
 		String selectedItem = signalsComboBox.getValue();
-		String name = nameTextField.getText();
-		double amplitude = Double.parseDouble(amplitudeTextField.getText());
-		int initTime = Integer.parseInt(initTimeTextField.getText());
-		int timeDuration = Integer.parseInt(timeDurationTextField.getText());
-		int samplingFreq = Integer.parseInt(samplingFrequencyTextField.getText());
-		
-		switch(selectedItem) {
-		case "szum o rozk³adzie jednostajnym":
-			signalsManager.addSignal(new UniformDistributionNoise(
-					name, amplitude, initTime, timeDuration, samplingFreq
-					));
-			break;
-			
-		case "szum gausowski":
-			signalsManager.addSignal(new GaussianNoise(
-					name, amplitude, initTime, timeDuration, samplingFreq
-					));
-			break;
-			
-		case "sygna³ sinusoidalny":
-			signalsManager.addSignal(new SinusoidalSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Integer.parseInt(periodTextField.getText())
-					));
-			break;
-			
-		case "sygna³ sinus. wyprostowany jednopo³ówkowo":
-			signalsManager.addSignal(new SinusoidalOneHalfSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Integer.parseInt(periodTextField.getText())
-					));
-			break;
-			
-		case "sygna³ sinus. wyprostowany dwupo³ówkowo":
-			signalsManager.addSignal(new SinusoidalTwoHalfSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Integer.parseInt(periodTextField.getText())
-					));
-			break;
-			
-		case "sygna³ prostok¹tny":
-			signalsManager.addSignal(new RectangularSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Integer.parseInt(periodTextField.getText()),
-					Double.parseDouble(fillFactoryTextField.getText())
-					));
-			break;
-			
-		case "sygna³ prostok¹tny symetryczny":
-			signalsManager.addSignal(new SymmetricalRectangularSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Integer.parseInt(periodTextField.getText()),
-					Double.parseDouble(fillFactoryTextField.getText())
-					));
-			break;
-		case "sygna³ trójk¹tny":
-			signalsManager.addSignal(new TriangularSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Integer.parseInt(periodTextField.getText()),
-					Double.parseDouble(fillFactoryTextField.getText())
-					));
-			break;
-		case "skok jednostkowy":
-			signalsManager.addSignal(new UnitJumpSignal(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Double.parseDouble(timeJumpTextField.getText())
-					));
-			break;
-		case "szum impulsowy":
-			signalsManager.addSignal(new PulseNoise(
-					name, amplitude, initTime, timeDuration, samplingFreq,
-					Double.parseDouble(propabilityTextField.getText())
-					));
+		try {
+			String name = nameTextField.getText();
+			if(name.length() == 0) {
+				throw new Exception();
+			}
+			double amplitude = Double.parseDouble(amplitudeTextField.getText());
+			int initTime = Integer.parseInt(initTimeTextField.getText());
+			int timeDuration = Integer.parseInt(timeDurationTextField.getText());
+			int samplingFreq = Integer.parseInt(samplingFrequencyTextField.getText());
+			switch (selectedItem) {
+			case "szum o rozk³adzie jednostajnym":
+				signalsManager
+						.addSignal(new UniformDistributionNoise(name, amplitude, initTime, timeDuration, samplingFreq));
+				break;
+
+			case "szum gausowski":
+				signalsManager.addSignal(new GaussianNoise(name, amplitude, initTime, timeDuration, samplingFreq));
+				break;
+
+			case "sygna³ sinusoidalny":
+				signalsManager.addSignal(new SinusoidalSignal(name, amplitude, initTime, timeDuration, samplingFreq,
+						Integer.parseInt(periodTextField.getText())));
+				break;
+
+			case "sygna³ sinus. wyprostowany jednopo³ówkowo":
+				signalsManager.addSignal(new SinusoidalOneHalfSignal(name, amplitude, initTime, timeDuration,
+						samplingFreq, Integer.parseInt(periodTextField.getText())));
+				break;
+
+			case "sygna³ sinus. wyprostowany dwupo³ówkowo":
+				signalsManager.addSignal(new SinusoidalTwoHalfSignal(name, amplitude, initTime, timeDuration,
+						samplingFreq, Integer.parseInt(periodTextField.getText())));
+				break;
+
+			case "sygna³ prostok¹tny":
+				signalsManager.addSignal(new RectangularSignal(name, amplitude, initTime, timeDuration, samplingFreq,
+						Integer.parseInt(periodTextField.getText()),
+						Double.parseDouble(fillFactoryTextField.getText())));
+				break;
+
+			case "sygna³ prostok¹tny symetryczny":
+				signalsManager.addSignal(new SymmetricalRectangularSignal(name, amplitude, initTime, timeDuration,
+						samplingFreq, Integer.parseInt(periodTextField.getText()),
+						Double.parseDouble(fillFactoryTextField.getText())));
+				break;
+			case "sygna³ trójk¹tny":
+				signalsManager.addSignal(new TriangularSignal(name, amplitude, initTime, timeDuration, samplingFreq,
+						Integer.parseInt(periodTextField.getText()),
+						Double.parseDouble(fillFactoryTextField.getText())));
+				break;
+			case "skok jednostkowy":
+				signalsManager.addSignal(new UnitJumpSignal(name, amplitude, initTime, timeDuration, samplingFreq,
+						Double.parseDouble(timeJumpTextField.getText())));
+				break;
+			case "szum impulsowy":
+				signalsManager.addSignal(new PulseNoise(name, amplitude, initTime, timeDuration, samplingFreq,
+						Double.parseDouble(propabilityTextField.getText())));
+			}
+		} catch (Exception e) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.initStyle(StageStyle.UTILITY);
+	        alert.setHeaderText("Wyst¹pi³ b³¹d");
+	        alert.setTitle("B³¹d");
+	        alert.setContentText("Podano nieprawid³owe parametry sygna³u!");
+	        alert.showAndWait();
 		}
 	}
 	

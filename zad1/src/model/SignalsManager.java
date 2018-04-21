@@ -159,15 +159,165 @@ public class SignalsManager {
 				result[i] = values2[i-initOffset*samplingFrequency];
 			}
 		} else {
-			for(; i < values2.length; i++) {
-				result[i] = values1[i-initOffset*samplingFrequency] + values2[i];
+			for(; i < values2.length+initOffset*samplingFrequency; i++) {
+				result[i] = values1[i] + values2[i-initOffset*samplingFrequency];
 			}
 			
 			for(; i < result.length; i++) {
-				result[i] = values1[i-initOffset*samplingFrequency];
+				result[i] = values1[i];
 			}
 		}
 		
 		signals.add(new Signal(name, initTime1, samplingFrequency, result));
+	}
+	
+	public void subSignals(Signal sig1, Signal sig2, String name) {
+		boolean flag =  false;
+		if(sig1.getInitTime() > sig2.getInitTime()) {
+			Signal temp = sig1;
+			sig1 = sig2;
+			sig2 = temp;
+			flag = true;
+		}
+		
+		int initTime1 = sig1.getInitTime();
+		int initTime2 = sig2.getInitTime();
+		
+		int endTime1 = initTime1 + sig1.getDuration();
+		int endTime2 = initTime2 + sig2.getDuration();
+		
+		int duration = ((endTime1 > endTime2) ? endTime1 : endTime2)
+				- (initTime1);
+		
+		int samplingFrequency = sig1.getSamplingFrequency();
+		double[] result = new double[duration*samplingFrequency];
+		
+		int initOffset = initTime2 - initTime1;
+		int i;
+		
+		double[] values1 = sig1.getValues();
+		double[] values2 = sig2.getValues();
+		
+		for(i = 0; i < initOffset*samplingFrequency; i++) {
+			if(flag) {
+				result[i] = -values1[i];
+			} else {
+				result[i] = values1[i];
+			}
+		}
+		
+		if(endTime1 <= endTime2) {
+			for(; i < values1.length; i++) {
+				if(flag) {
+					result[i] = values2[i-initOffset*samplingFrequency] - values1[i];
+				} else {
+					result[i] = values1[i] - values2[i-initOffset*samplingFrequency];
+				}
+			}
+			
+			for(; i < result.length; i++) {
+				if(flag) {
+					result[i] = values2[i-initOffset*samplingFrequency];
+				} else {
+					result[i] = -values2[i-initOffset*samplingFrequency];
+				}	
+			}
+		} else {
+			for(; i < values2.length + initOffset*samplingFrequency; i++) {
+				if(flag) {
+					result[i] = values2[i-initOffset*samplingFrequency] - values1[i];
+				} else {
+					result[i] = values1[i] - values2[i-initOffset*samplingFrequency];
+				}	
+			}
+			
+			for(; i < result.length; i++) {
+				if(flag) {
+					result[i] = values1[i];
+				} else {
+					result[i] = -values1[i];
+				}
+			}
+		}
+		
+		signals.add(new Signal(name, initTime1, samplingFrequency, result));
+	}
+	
+	public void mulSignals(Signal sig1, Signal sig2, String name) {
+		if(sig1.getInitTime() > sig2.getInitTime()) {
+			Signal temp = sig1;
+			sig1 = sig2;
+			sig2 = temp;
+		}
+		
+		int initTime1 = sig1.getInitTime();
+		int initTime2 = sig2.getInitTime();
+		int initOffset = initTime2 - initTime1;
+		
+		int endTime1 = initTime1 + sig1.getDuration();
+		int endTime2 = initTime2 + sig2.getDuration();
+		
+		double[] values1 = sig1.getValues();
+		double[] values2 = sig2.getValues();
+		double[] result;
+		
+		int samplingFrequency = sig1.getSamplingFrequency();
+		
+		if(endTime1 <= endTime2) {
+			result = new double[(sig1.getDuration()-initOffset)*samplingFrequency];
+		} else {
+			result = new double[sig2.getDuration()*samplingFrequency];	
+		}
+		
+		for(int i = 0; i < result.length; i++) {
+			result[i] = values1[i+initOffset*samplingFrequency]*values2[i];
+		}
+		
+		signals.add(new Signal(name, initTime2, samplingFrequency, result));
+	}
+	
+	public void divSignals(Signal sig1, Signal sig2, String name) throws Exception {
+		boolean flag = false;
+		if(sig1.getInitTime() > sig2.getInitTime()) {
+			Signal temp = sig1;
+			sig1 = sig2;
+			sig2 = temp;
+			flag = true;
+		}
+		
+		int initTime1 = sig1.getInitTime();
+		int initTime2 = sig2.getInitTime();
+		int initOffset = initTime2 - initTime1;
+		
+		int endTime1 = initTime1 + sig1.getDuration();
+		int endTime2 = initTime2 + sig2.getDuration();
+		
+		double[] values1 = sig1.getValues();
+		double[] values2 = sig2.getValues();
+		double[] result;
+		
+		int samplingFrequency = sig1.getSamplingFrequency();
+		
+		if(endTime1 <= endTime2) {
+			result = new double[(sig1.getDuration()-initOffset)*samplingFrequency];
+		} else {
+			result = new double[sig2.getDuration()*samplingFrequency];
+		}
+		
+		for(int i = 0; i < result.length; i++) {
+			if(flag) {
+				if(values1[i+initOffset*samplingFrequency] == 0) {
+					throw new Exception();
+				}
+				result[i] = values2[i] / values1[i+initOffset*samplingFrequency];
+			} else {
+				if(values2[i] == 0) {
+					throw new Exception();
+				}
+				result[i] = values1[i+initOffset*samplingFrequency] / values2[i];
+			}
+		}
+		
+		signals.add(new Signal(name, initTime2, samplingFrequency, result));
 	}
 }

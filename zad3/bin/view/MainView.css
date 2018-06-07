@@ -1,0 +1,75 @@
+#signalChart .chart-symbol {
+	-fx-padding: 1.5px;
+}
+
+#samplingChart .axis:top {
+    -fx-border-color: transparent;
+}
+
+#samplingChart .axis:right {
+    -fx-border-color: transparent;
+}
+
+#samplingChart .axis:bottom {
+    -fx-border-color: transparent;
+}
+
+#samplingChart .axis:left {
+    -fx-border-color: transparent;
+}
+
+#samplingChart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+#samplingChart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+#quantizationChart .axis:top {
+    -fx-border-color: transparent;
+}
+
+#quantizationChart .axis:right {
+    -fx-border-color: transparent;
+}
+
+#quantizationChart .axis:bottom {
+    -fx-border-color: transparent;
+}
+
+#quantizationChart .axis:left {
+    -fx-border-color: transparent;
+}
+
+#quantizationChart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+#quantizationChart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+#reconstructedChart .axis:top {
+    -fx-border-color: transparent;
+}
+
+#reconstructedChart .axis:right {
+    -fx-border-color: transparent;
+}
+
+#reconstructedChart .axis:bottom {
+    -fx-border-color: transparent;
+}
+
+#reconstructedChart .axis:left {
+    -fx-border-color: transparent;
+}
+
+#reconstructedChart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+#reconstructedChart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
